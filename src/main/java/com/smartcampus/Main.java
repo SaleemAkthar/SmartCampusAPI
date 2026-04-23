@@ -11,9 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        // Base URI is the root — @ApplicationPath("/api/v1") on SmartCampusApplication
-        // tells Jersey to mount all resources under /api/v1
-        final URI BASE_URI = URI.create("http://0.0.0.0:8080/");
+        final URI BASE_URI = URI.create("http://0.0.0.0:8080/api/v1/");
 
         SmartCampusApplication app = new SmartCampusApplication();
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, app, false);
@@ -21,9 +19,8 @@ public class Main {
 
         LOGGER.info("====================================");
         LOGGER.info("Smart Campus API is RUNNING!");
-        LOGGER.info("Discovery: http://localhost:8080/api/v1");
-        LOGGER.info("Rooms:     http://localhost:8080/api/v1/rooms");
-        LOGGER.info("Sensors:   http://localhost:8080/api/v1/sensors");
+        LOGGER.info("Rooms:   http://localhost:8080/api/v1/rooms");
+        LOGGER.info("Sensors: http://localhost:8080/api/v1/sensors");
         LOGGER.info("====================================");
 
         Runtime.getRuntime().addShutdownHook(new Thread(server::shutdownNow));
