@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Path("/")
+@Path("info")
 public class DiscoveryResource {
 
     @GET
@@ -20,7 +20,7 @@ public class DiscoveryResource {
         resources.put("sensors", "/api/v1/sensors");
 
         Map<String, String> links = new LinkedHashMap<>();
-        links.put("self", "/api/v1");
+        links.put("self", "/api/v1/info");
         links.put("rooms", "/api/v1/rooms");
         links.put("sensors", "/api/v1/sensors");
 
