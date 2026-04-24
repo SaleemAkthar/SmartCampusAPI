@@ -18,21 +18,29 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
     @Override
     public Response toResponse(Throwable ex) {
 
-        // If it is already a JAX-RS exception (like 404), just pass it through
         if (ex instanceof WebApplicationException) {
             WebApplicationException wae = (WebApplicationException) ex;
             int status = wae.getResponse().getStatus();
+
+            String errorMsg;
+            switch (status) {
+                case 404: errorMsg = "Not Found"; break;
+                case 405: errorMsg = "Method Not Allowed"; break;
+                case 415: errorMsg = "Unsupported Media Type"; break;
+                case 400: errorMsg = "Bad Request"; break;
+                default:  errorMsg = "Request Error"; break;
+            }
+
             Map<String, Object> error = new LinkedHashMap<>();
             error.put("status", status);
-            error.put("error", "Not Found");
-            error.put("message", "The requested resource was not found.");
+            error.put("error", errorMsg);
+            error.put("message", wae.getMessage() != null ? wae.getMessage() : "An error occurred.");
             return Response.status(status)
                     .type(MediaType.APPLICATION_JSON)
                     .entity(error)
                     .build();
         }
 
-        // Only log and return 500 for truly unexpected errors
         LOGGER.log(Level.SEVERE, "Unexpected error: " + ex.getMessage(), ex);
 
         Map<String, Object> error = new LinkedHashMap<>();
