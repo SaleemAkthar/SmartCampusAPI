@@ -23,12 +23,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("sensors")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class SensorResource {
 
     private final DataStore store = DataStore.getInstance();
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.WILDCARD)
     public Response getSensors(@QueryParam("type") String type) {
         Collection<Sensor> all = store.getSensors().values();
         if (type != null && !type.trim().isEmpty()) {
@@ -41,8 +43,6 @@ public class SensorResource {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response createSensor(Sensor sensor) {
         if (sensor.getId() == null || sensor.getId().trim().isEmpty()) {
             Map<String, Object> err = new LinkedHashMap<>();
@@ -75,7 +75,7 @@ public class SensorResource {
 
     @GET
     @Path("{sensorId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.WILDCARD)
     public Response getSensor(@PathParam("sensorId") String sensorId) {
         Sensor sensor = store.getSensor(sensorId);
         if (sensor == null) {
@@ -86,7 +86,7 @@ public class SensorResource {
 
     @DELETE
     @Path("{sensorId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.WILDCARD)
     public Response deleteSensor(@PathParam("sensorId") String sensorId) {
         Sensor sensor = store.getSensor(sensorId);
         if (sensor == null) {
