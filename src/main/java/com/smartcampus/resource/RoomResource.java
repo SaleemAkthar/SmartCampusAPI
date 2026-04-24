@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.Map;
 
 @Path("rooms")
+@Produces(MediaType.APPLICATION_JSON)
 public class RoomResource {
 
     private final DataStore store = DataStore.getInstance();
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.WILDCARD)
     public Response getAllRooms() {
         List<Room> roomList = new ArrayList<>(store.getRooms().values());
         return Response.ok(roomList).build();
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRoom(Room room) {
         if (room.getId() == null || room.getId().trim().isEmpty()) {
@@ -61,7 +61,7 @@ public class RoomResource {
 
     @GET
     @Path("{roomId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.WILDCARD)
     public Response getRoom(@PathParam("roomId") String roomId) {
         Room room = store.getRoom(roomId);
         if (room == null) {
@@ -72,7 +72,7 @@ public class RoomResource {
 
     @DELETE
     @Path("{roomId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.WILDCARD)
     public Response deleteRoom(@PathParam("roomId") String roomId) {
         Room room = store.getRoom(roomId);
         if (room == null) {
